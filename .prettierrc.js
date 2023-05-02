@@ -5,4 +5,6 @@ module.exports = {
   printWidth: 80, // 줄 바꿈 문자 길이
   tabWidth: 2, // 탭 너비
   endOfLine: 'auto', // 줄 끝에 사용할 개행 문자
+  bracketSpacing: true,
+  arrowParens: 'avoid',
 };

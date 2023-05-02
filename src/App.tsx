@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import About from './Route/About';
+import Login from './Route/Login';
+import Register from './Route/Register';
+import Main from './Route/Main';
+import MySong from './Route/MySong';
 
 function App() {
+  const [chunks, setChunks] = useState<Blob[]>([]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<About />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/main" element={<Main />} />
+
+      <Route path="/main/my18list" element={<MySong />} />
+    </Routes>
   );
 }
-
+//<Main chunks={chunks} setChunks={setChunks} />
 export default App;

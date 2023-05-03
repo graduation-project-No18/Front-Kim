@@ -1,4 +1,4 @@
-import { Variants, motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -17,8 +17,10 @@ const HeaderLogo=styled(motion.div)`
     font-size:30px;
     color:${props=>props.theme.white.lighter};
     font-weight:600;
-    &:hover{
+    span{
+        &:hover{
         cursor:pointer;
+        }
     }
 `
 
@@ -82,7 +84,7 @@ function AboutHeader(){
     const navAnimation=useAnimation();
     const {scrollY}=useScroll();
     useMotionValueEvent(scrollY, "change", (latest) => {
-        if(Number(latest)>300){
+        if(Number(latest)>280){
             navAnimation.start({
                 backgroundColor:"rgba(0,0,0,0.8)"
             })
@@ -97,7 +99,9 @@ function AboutHeader(){
     const nowLogin=useMatch('/login');
     const nowRegister=useMatch('/register');
     return <><HeaderWrapper animate={navAnimation}>
-        <HeaderLogo onClick={logoClicked}>NO18</HeaderLogo>
+        <HeaderLogo>
+            <span onClick={logoClicked}>NO18</span>
+        </HeaderLogo>
         <HeaderButton>
             <Link to='/' style={{textDecoration: "none"}}><AboutBtn>About{nowAbout ? <NowDot layoutId="nowDot" /> : null}</AboutBtn></Link>
             <Link to='/login' style={{textDecoration: "none"}}><LoginBtn>Login{nowLogin ? <NowDot layoutId="nowDot" /> : null}</LoginBtn></Link>

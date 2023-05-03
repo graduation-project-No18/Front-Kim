@@ -124,7 +124,7 @@ const AboutFooter=styled.footer`
     }
 `
 
-const AboutIntroVariants:Variants={
+export const AboutIntroVariants:Variants={
     initial:{
         opacity:0
     },

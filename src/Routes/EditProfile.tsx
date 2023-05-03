@@ -1,7 +1,7 @@
 import DetailHeader from "../components/DetailHeader";
 import { AboutWrapper } from "./About";
 
-function MySong(){
+function EditProfile(){
     return <><DetailHeader />
     <AboutWrapper>
 
@@ -9,4 +9,4 @@ function MySong(){
     </>
 }
 
-export default MySong;
+export default EditProfile;

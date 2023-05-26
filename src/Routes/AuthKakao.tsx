@@ -1,13 +1,20 @@
 import { useEffect } from "react";
-import { axiosPublic } from "../axios";
+import { axiosPrivate, axiosPublic } from "../axios";
+import { useNavigate } from "react-router-dom";
 
-function AuthKakao(){
-    useEffect(()=>{
-        let code = new URL(window.location.href).searchParams.get('code')
-        axiosPublic.get(`http://3.37.47.43:8080/oauth2/authorization/kakao?code=${code}`)
-        .then(res=>console.log(res));
-    },[])
-    return <div>hello</div>
+function AuthKakao() {
+    const navigate=useNavigate();
+    const accessToken="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNzM5NzY0NTY5Iiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg1OTMxNTc3fQ.IMAtgH4w6JjNiYD3pOKkxAsowpnzUqZNmL84Uq9xf3o";
+    useEffect(() => {
+        axiosPrivate.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accessToken}`;
+          localStorage.setItem("accessToken",accessToken);
+          setTimeout(()=>{
+            navigate('/main');
+          },1000)
+    }, [])
+    return <div></div>
 }
 
 export default AuthKakao;

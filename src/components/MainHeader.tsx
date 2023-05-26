@@ -158,7 +158,7 @@ function MainHeader(){
                 exit="exit"
                 >
                 <UserProfileDetailList onClick={EditProfileClicked}>
-                    프로필 수정
+                    내 프로필
                 </UserProfileDetailList>
                 <UserProfileDetailList onClick={MySongClicked}>
                     노래 저장소

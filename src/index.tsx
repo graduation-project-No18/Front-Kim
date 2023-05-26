@@ -5,6 +5,7 @@ import {BrowserRouter} from 'react-router-dom';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { theme } from './theme';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { RecoilRoot } from 'recoil';
 
 const GlobalStyle=createGlobalStyle`
   /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -66,13 +67,15 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   // <React.StrictMode>
-  <ThemeProvider theme={theme}>
-	<DragDropContext onDragEnd={dragDone}>
-		<BrowserRouter>
-			<App />
-			<GlobalStyle />
-		</BrowserRouter>
-	</DragDropContext>
-  </ThemeProvider>
+  <RecoilRoot>
+	<ThemeProvider theme={theme}>
+		<DragDropContext onDragEnd={dragDone}>
+			<BrowserRouter>
+				<App />
+				<GlobalStyle />
+			</BrowserRouter>
+		</DragDropContext>
+	</ThemeProvider>
+  </RecoilRoot>
   // </React.StrictMode>
 );

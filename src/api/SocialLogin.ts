@@ -1,5 +1,5 @@
 const KAKAO_API_KEY='4644f42b4b35500ed8e8cf88eb30de90';
-const KAKAO_REDIRECT_URI='http://localhost:3000/user/kakao/callback';
+const KAKAO_REDIRECT_URI='http://localhost:3000/oauth/redirect';
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 const GOOGLE_API_KEY='145519435702-vaba0uhg5aip8lm6b3v3ef6d9b8vf8t0.apps.googleusercontent.com';

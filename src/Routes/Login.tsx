@@ -6,6 +6,11 @@ import { Variants, motion } from 'framer-motion';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import {
+  GOOGLE_AUTH_URL,
+  KAKAO_AUTH_URL,
+  NAVER_AUTH_URL,
+} from '../api/SocialLogin';
 
 export const FormWrapper = styled(motion.div)`
   width: 400px;
@@ -208,9 +213,15 @@ function Login() {
   } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = data => console.log(data);
   const [loginSuccess, setLoginSuccess] = useState(false);
-  const kakaoLogin = () => {}; // eslint-disable-line @typescript-eslint/no-empty-function
-  const naverLogin = () => {}; // eslint-disable-line @typescript-eslint/no-empty-function
-  const googleLogin = () => {}; // eslint-disable-line @typescript-eslint/no-empty-function
+  const kakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
+  const naverLogin = () => {
+    window.location.href = NAVER_AUTH_URL;
+  };
+  const googleLogin = () => {
+    window.location.href = GOOGLE_AUTH_URL;
+  };
   return (
     <>
       <AboutHeader />

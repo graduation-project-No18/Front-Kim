@@ -4,6 +4,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { theme } from './theme';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 const GlobalStyle = createGlobalStyle`
   /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -56,16 +57,22 @@ table {
 }
 `;
 
+const dragDone = () => {
+  console.log('drag done');
+};
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   // <React.StrictMode>
   <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      <App />
-      <GlobalStyle />
-    </BrowserRouter>
+    <DragDropContext onDragEnd={dragDone}>
+      <BrowserRouter>
+        <App />
+        <GlobalStyle />
+      </BrowserRouter>
+    </DragDropContext>
   </ThemeProvider>,
   // </React.StrictMode>
 );

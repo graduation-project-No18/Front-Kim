@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { accessToken } from "../recoil";
 
 const HeaderWrapper=styled(motion.nav)`
     position:fixed;
@@ -123,6 +125,7 @@ const UserProfileVariants:Variants={
 function MainHeader(){
     const navigate=useNavigate();
     const [onProfile,setOnProfiile]=useState(false);
+    const [token,setToken]=useRecoilState(accessToken);
     const onUserProfileBtn=()=>{
         setOnProfiile(prev=>!prev);
     }
@@ -140,6 +143,14 @@ function MainHeader(){
     }
     const handleDragStart=()=>{
         console.log("dragged");
+    }
+    const logoutBtn=()=>{
+        let answer = window.confirm("로그아웃 하시겠습니까?");
+        if(answer){
+            setToken(null);
+            localStorage.removeItem('accessToken');
+            navigate('/');
+        }
     }
     return <HeaderWrapper>
         <HeaderLogo>
@@ -165,7 +176,7 @@ function MainHeader(){
                 </UserProfileDetailList>
                 </UserProfileDetail> : null}</AnimatePresence>
             </UserProfileBtn>
-            <LogoutBtn>
+            <LogoutBtn onClick={logoutBtn}>
                 <FontAwesomeIcon icon={faRightFromBracket} />
             </LogoutBtn>
         </HeaderButton>

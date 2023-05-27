@@ -55,7 +55,7 @@ function RecordVoice() {
         const dataArray = new Uint8Array(bufferLength);
         analyser.getByteTimeDomainData(dataArray);
 
-        canvasContext.fillStyle = 'rgb(200, 200, 200)';
+        canvasContext.fillStyle = 'rgb(47, 47, 47)';
         canvasContext.fillRect(
           0,
           0,
@@ -64,7 +64,7 @@ function RecordVoice() {
         );
 
         canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'rgb(0, 0, 0)';
+        canvasContext.strokeStyle = 'rgb(117, 251, 153)';
 
         canvasContext.beginPath();
 
@@ -150,6 +150,7 @@ function RecordVoice() {
           initial="initial"
           animate="animate"
         >
+          <Canvas ref={canvasRef} />
           {recording ? (
             <>
               <Button onClick={handleStopRecording}>Stop Recording</Button>
@@ -159,16 +160,15 @@ function RecordVoice() {
             <Button onClick={handleStartRecording}>Start Recording</Button>
           )}
 
-          <Canvas ref={canvasRef} />
           {recordingBlob && (
             <div>
               <audio controls src={URL.createObjectURL(recordingBlob)} />
-              <a
+              {/* <a
                 href={URL.createObjectURL(recordingBlob)}
                 download="recording.wav"
               >
                 Download
-              </a>
+              </a> */}
               <Button onClick={handleSendData}>Send Data</Button>
             </div>
           )}
@@ -182,6 +182,10 @@ function RecordVoice() {
 export default RecordVoice;
 
 const RecordBox = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   width: 50%;
   height: 50%;
   justify-content: center;

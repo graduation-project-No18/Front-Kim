@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom"
 
-const AuthenticationCheck=({accessToken}:any)=>{
-    if(accessToken!==null){
+const AuthenticationCheck=({isAuthenticated}:any)=>{
+    if(isAuthenticated){
         return <Navigate to="/main" replace />
     }
 

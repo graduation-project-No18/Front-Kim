@@ -3,7 +3,9 @@ import MainHeader from "../components/MainHeader";
 import { AboutWrapper } from "./About";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { axiosPrivate } from "../axios";
+import { axiosPublic } from "../axios";
 
 const BeforeRecordArea=styled(motion.div)`
     width:50%;
@@ -67,6 +69,10 @@ function Main(){
             navigate('record');
         },600);  
     }
+    useEffect(()=>{
+        axiosPrivate.get('http://3.37.47.43:8080/api/members')
+        .then(res=>console.log(res));
+    })
     return <>
     <MainHeader />
     <AboutWrapper>

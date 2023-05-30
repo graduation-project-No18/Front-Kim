@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { accessToken } from "../recoil";
+import { user } from "../recoil";
+import { AboutWrapper } from "./About";
 
 function NotFound(){
     const navigate=useNavigate();
-    const [token,setToken]=useRecoilState(accessToken);
+    const [userState,setUserState]=useRecoilState(user);
     useEffect(()=>{
-        if(token===null){
+        if(!userState.isAuthenticated){
             setTimeout(()=>{
                 navigate('/');
             },1000)
@@ -18,7 +19,9 @@ function NotFound(){
             },1000)
         }
     },[])
-    return <h1>Not Found</h1>
+    return <AboutWrapper>
+        <h1 style={{color:"white",fontSize:40}}>Not Found</h1>
+    </AboutWrapper>
 }
 
 export default NotFound

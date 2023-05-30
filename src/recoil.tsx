@@ -4,20 +4,36 @@ import { axiosPrivate } from "./axios";
 
 const { persistAtom } = recoilPersist();
 
-const getAccessToken=()=>{
-  const accessToken=localStorage.getItem("accessToken")||null;
-  if (accessToken) {
-    // 어세스토큰이 있으면 axios 인스턴스에 커먼 헤더로 집어넣음
+interface UserState {
+  deleted: boolean;
+  introduction: string | null;
+  nickname: string;
+  octave: string | null;
+  profileImg: string;
+  isAuthenticated:boolean;
+}
+
+const defaultUserState: UserState = {
+  deleted: false,
+  introduction: null,
+  nickname: "NO18",
+  octave: null,
+  profileImg: "./img/defaultIcon",
+  isAuthenticated:false
+};
+
+const getAccessToken=():UserState=>{
+  const accessToken=localStorage.getItem("accessToken");
+  if(accessToken){
     axiosPrivate.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${accessToken}`;
-
-    return accessToken;
+    return {...defaultUserState,isAuthenticated:true}
   }
-  return null;
+  return {...defaultUserState};
 }
 
-export const accessToken = atom({
-    key: 'accessToken',
-    default: getAccessToken(),
-});
+export const user=atom<UserState>({
+  key:"user",
+  default:getAccessToken(),
+})

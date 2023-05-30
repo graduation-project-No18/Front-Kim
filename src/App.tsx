@@ -12,19 +12,19 @@ import AuthGoogle from './Routes/AuthGoogle';
 import AuthNaver from './Routes/AuthNaver';
 import RequireAuth from './AuthHoc/RequireAuth';
 import { useRecoilState } from 'recoil';
-import { accessToken } from './recoil';
+import { user } from './recoil';
 import AuthenticationCheck from './AuthHoc/AuthenticationCheck';
 import NotFound from './Routes/NotFound';
 
 function App() {
-  const [token,setToken]=useRecoilState(accessToken);
+  const [userState,setUserState]=useRecoilState(user);
   return <Routes>
-    <Route element={<AuthenticationCheck accessToken={token} />}>
+    <Route element={<AuthenticationCheck isAuthenticated={userState.isAuthenticated} />}>
         <Route path='/' element={<About />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
     </Route>
-    <Route element={<RequireAuth accessToken={token}/>}>
+    <Route element={<RequireAuth isAuthenticated={userState.isAuthenticated}/>}>
         <Route path='/main' element={<Main />} />
         <Route path='/main/editprofile' element={<EditProfile />} />
         <Route path='/main/record' element={<RecordVoice />} />

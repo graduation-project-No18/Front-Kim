@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-function RequireAuth({accessToken}:any){
-    if(accessToken===null){
+function RequireAuth({isAuthenticated}:any){
+    if(!isAuthenticated){
         return <Navigate to="/login" replace />
     }
     return <Outlet />

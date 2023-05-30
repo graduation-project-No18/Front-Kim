@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { accessToken } from "../recoil";
+import { user } from "../recoil";
 
 const HeaderWrapper=styled(motion.nav)`
     position:fixed;
@@ -107,7 +107,7 @@ const UserProfileVariants:Variants={
 
 function DetailHeader(){
     const navigate=useNavigate();
-    const [token,setToken]=useRecoilState(accessToken);
+    const [userState,setUserState]=useRecoilState(user);
     const [onProfile,setOnProfiile]=useState(false);
     const onUserProfileBtn=()=>{
         setOnProfiile(prev=>!prev);
@@ -130,7 +130,7 @@ function DetailHeader(){
     const logoutBtn=()=>{
         let answer = window.confirm("로그아웃 하시겠습니까?");
         if(answer){
-            setToken(null);
+            setUserState({...userState,isAuthenticated:false})
             localStorage.removeItem('accessToken');
             navigate('/');
         }

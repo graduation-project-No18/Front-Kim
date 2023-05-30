@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import AboutHeader from '../components/AboutHeader';
 import { AboutWrapper } from './About';
 import styled from 'styled-components';
-import { AboutFooter } from './Login';
 import axios from 'axios';
 import { Variants, motion } from 'framer-motion';
 import MainHeader from '../components/MainHeader';
@@ -18,7 +16,7 @@ const RecordBoxVariants: Variants = {
     },
   },
 };
-// if (!canvasRef.current) return;
+
 function RecordVoice() {
   const [recording, setRecording] = useState(false);
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
@@ -45,15 +43,15 @@ function RecordVoice() {
         mediaRecorder.current.stream,
       );
       source.connect(analyser);
-      analyser.connect(audioContext.destination);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
       const draw = () => {
         if (!canvasRef.current) return;
         requestAnimationFrame(draw);
 
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        analyser.getByteTimeDomainData(dataArray);
+        analyser.getByteFrequencyData(dataArray);
 
         canvasContext.fillStyle = 'rgb(47, 47, 47)';
         canvasContext.fillRect(
@@ -63,32 +61,22 @@ function RecordVoice() {
           canvasRef.current.height,
         );
 
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'rgb(117, 251, 153)';
-
-        canvasContext.beginPath();
-
-        const sliceWidth = (canvasRef.current.width * 1.0) / bufferLength;
+        const barWidth = (canvasRef.current.width / bufferLength) * 2.5;
         let x = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-          const v = dataArray[i] / 128.0;
-          const y = (v * canvasRef.current.height) / 2;
+          const barHeight = (dataArray[i] / 255) * canvasRef.current.height;
 
-          if (i === 0) {
-            canvasContext.moveTo(x, y);
-          } else {
-            canvasContext.lineTo(x, y);
-          }
+          canvasContext.fillStyle = `rgb(${barHeight + 100}, 117, 153)`;
+          canvasContext.fillRect(
+            x,
+            canvasRef.current.height - barHeight,
+            barWidth,
+            barHeight,
+          );
 
-          x += sliceWidth;
+          x += barWidth + 1;
         }
-
-        canvasContext.lineTo(
-          canvasRef.current.width,
-          canvasRef.current.height / 2,
-        );
-        canvasContext.stroke();
       };
 
       draw();
@@ -120,6 +108,9 @@ function RecordVoice() {
     mediaRecorder.current?.stop();
     setRecording(false);
     setStartTime(null);
+
+    const tracks = mediaRecorder.current?.stream.getTracks();
+    tracks?.forEach(track => track.stop());
   };
 
   const handleSendData = async () => {
@@ -154,7 +145,7 @@ function RecordVoice() {
           {recording ? (
             <>
               <Button onClick={handleStopRecording}>Stop Recording</Button>
-              {startTime !== null && <div> 녹음 시간: {time} 초</div>}
+              {startTime !== null && <div>녹음 시간: {time} 초</div>}
             </>
           ) : (
             <Button onClick={handleStartRecording}>Start Recording</Button>
@@ -163,12 +154,12 @@ function RecordVoice() {
           {recordingBlob && (
             <div>
               <audio controls src={URL.createObjectURL(recordingBlob)} />
-              {/* <a
+              <a
                 href={URL.createObjectURL(recordingBlob)}
-                download="recording.wav"
+                download="recording.mp3"
               >
                 Download
-              </a> */}
+              </a>
               <Button onClick={handleSendData}>Send Data</Button>
             </div>
           )}

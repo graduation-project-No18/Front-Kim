@@ -171,9 +171,6 @@ function MainHeader(){
                 <UserProfileDetailList onClick={EditProfileClicked}>
                     내 프로필
                 </UserProfileDetailList>
-                <UserProfileDetailList onClick={MySongClicked}>
-                    노래 저장소
-                </UserProfileDetailList>
                 </UserProfileDetail> : null}</AnimatePresence>
             </UserProfileBtn>
             <LogoutBtn onClick={logoutBtn}>

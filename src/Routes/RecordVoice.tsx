@@ -6,6 +6,7 @@ import { AboutFooter } from './Login';
 import axios from 'axios';
 import { Variants, motion } from 'framer-motion';
 import MainHeader from '../components/MainHeader';
+import DetailHeader from '../components/DetailHeader';
 
 const RecordBoxVariants: Variants = {
   initial: {
@@ -143,7 +144,7 @@ function RecordVoice() {
   //new Date().getTime() - startTime
   return (
     <>
-      <MainHeader />
+      <DetailHeader />
       <AboutWrapper>
         <RecordBox
           variants={RecordBoxVariants}

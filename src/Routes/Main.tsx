@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { axiosPrivate } from "../axios";
 import { axiosPublic } from "../axios";
+import { user } from "../recoil";
 
 const BeforeRecordArea=styled(motion.div)`
     width:50%;
@@ -46,6 +47,7 @@ export const RecordBoxVariants:Variants={
 
 function Main(){
     const navigate=useNavigate();
+    const memberId='16de3dcd-2fca-473e-8219-6632d8a011a5';
     const [areaClicked,setAreaClicked]=useState(false);
     const dropBox = useRef<HTMLDivElement>(null);
     const handleDragOver = (event:any) => {
@@ -70,9 +72,9 @@ function Main(){
         },600);  
     }
     useEffect(()=>{
-        axiosPrivate.get('http://3.37.47.43:8080/api/members')
+        axiosPrivate.get('http://3.37.47.43:8080/api/recording')
         .then(res=>console.log(res));
-    })
+    },[])
     return <>
     <MainHeader />
     <AboutWrapper>

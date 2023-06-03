@@ -4,7 +4,6 @@ import About from './Routes/About';
 import Login from './Routes/Login';
 import Register from './Routes/Register';
 import Main from './Routes/Main';
-import MySong from './Routes/MySong';
 import EditProfile from './Routes/EditProfile';
 import RecordVoice from './Routes/RecordVoice';
 import AuthKakao from './Routes/AuthKakao';
@@ -28,7 +27,6 @@ function App() {
         <Route path='/main' element={<Main />} />
         <Route path='/main/editprofile' element={<EditProfile />} />
         <Route path='/main/record' element={<RecordVoice />} />
-        <Route path='/main/mysong' element={<MySong />} />
     </Route>
     <Route path='/oauth/redirect' element={<AuthKakao />} />
     <Route path='/user/google/callback' element={<AuthGoogle />} />

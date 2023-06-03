@@ -2,8 +2,6 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { axiosPrivate } from "./axios";
 
-const { persistAtom } = recoilPersist();
-
 interface UserState {
   deleted: boolean;
   introduction: string;

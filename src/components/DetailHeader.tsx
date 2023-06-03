@@ -1,5 +1,5 @@
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faRightFromBracket,faMicrophone } from "@fortawesome/free-solid-svg-icons";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { useState } from "react";

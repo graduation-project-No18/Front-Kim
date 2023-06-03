@@ -71,7 +71,7 @@ const UserProfileImg=styled.div<{imageUrl:string}>`
     width:50px;
     height:50px;
     background-image: ${props => `url(${props.imageUrl})`};
-    background-size:contain
+    background-size:contain;
 `
 
 const LogoutBtn=styled.div`

@@ -37,7 +37,7 @@ const HeaderButton=styled(motion.div)`
     box-sizing:border-box;
 `
 
-const UserProfileBtn=styled.div`
+const UserProfileImg=styled.div<{imageUrl:string}>`
     position:relative;
     font-size:18px;
     color:${props=>props.theme.white.darker};
@@ -53,6 +53,8 @@ const UserProfileBtn=styled.div`
     border-radius: 50%;
     width:50px;
     height:50px;
+    background-image: ${props => `url(${props.imageUrl})`};
+    background-size:contain;
 `
 
 const LogoutBtn=styled.div`
@@ -140,8 +142,7 @@ function DetailHeader(){
             <span onClick={logoClicked}>NO18</span>
         </HeaderLogo>
         <HeaderButton>
-            <UserProfileBtn onMouseEnter={onUserProfileBtn} onMouseLeave={LeaveUserProfileBtn}>
-                <span><FontAwesomeIcon icon={faUser} /></span>
+            <UserProfileImg onMouseEnter={onUserProfileBtn} onMouseLeave={LeaveUserProfileBtn} imageUrl={userState.profileImg}>
                 <AnimatePresence>{onProfile ? <UserProfileDetail 
                 variants={UserProfileVariants}
                 initial="initial"
@@ -152,7 +153,7 @@ function DetailHeader(){
                     내 프로필
                 </UserProfileDetailList>
                 </UserProfileDetail> : null}</AnimatePresence>
-            </UserProfileBtn>
+            </UserProfileImg>
             <LogoutBtn onClick={logoutBtn}>
                 <FontAwesomeIcon icon={faRightFromBracket} />
             </LogoutBtn>

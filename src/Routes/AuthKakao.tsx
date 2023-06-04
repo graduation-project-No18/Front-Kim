@@ -18,7 +18,6 @@ function AuthKakao() {
           setUserState({...userState,isAuthenticated:true})
           axiosPrivate.get(`http://3.37.47.43:8080/api/members/${memberId}`)
           .then(res=>{
-            console.log(res)
             setUserState({
               ...userState,
               introduction:res.data.body.member.introduction,

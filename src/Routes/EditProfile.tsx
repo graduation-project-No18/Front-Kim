@@ -9,6 +9,7 @@ import { useRef } from "react";
 import { axiosPrivate } from "../axios";
 import { Variants, motion } from "framer-motion";
 import {useState} from "react";
+import SongBox from "../components/SongBox";
 
 const EditProfileArea=styled(motion.div)`
     width:80%;
@@ -20,8 +21,10 @@ const EditProfileArea=styled(motion.div)`
 
 const SavedSongArea=styled(motion.div)`
     width:100%;
-    height:35%;
+    height:40%;
     background-color: red;
+    display: flex;
+    justify-content: center;
 `
 
 const ImgArea=styled.div`
@@ -240,7 +243,7 @@ function EditProfile(){
             </TextArea>
         </EditProfileArea>
         <SavedSongArea variants={MyPageVariants} initial="initial" animate="animate">
-
+            <SongBox albumCover="https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg" title="나와 같다면" singer="김연우" songOctave="F3" youtubeUrl="https://youtube.com" />
         </SavedSongArea>
     </AboutWrapper>
     </>

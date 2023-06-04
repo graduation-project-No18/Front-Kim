@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { user } from "../recoil";
+import { axiosPrivate } from "../axios";
 
 const HeaderWrapper=styled(motion.nav)`
     position:fixed;
@@ -126,6 +127,7 @@ const UserProfileVariants:Variants={
 
 function MainHeader(){
     const navigate=useNavigate();
+    const memberId='16de3dcd-2fca-473e-8219-6632d8a011a5';
     const [onProfile,setOnProfiile]=useState(false);
     const [userState,setUserState]=useRecoilState(user);
     const onUserProfileBtn=()=>{
@@ -154,6 +156,9 @@ function MainHeader(){
             navigate('/');
         }
     }
+    const userSecessionClicked=()=>{
+
+    }
     return <HeaderWrapper>
         <HeaderLogo>
             <span onClick={logoClicked}>NO18</span>
@@ -171,6 +176,9 @@ function MainHeader(){
                 >
                 <UserProfileDetailList onClick={EditProfileClicked}>
                     내 프로필
+                </UserProfileDetailList>
+                <UserProfileDetailList onClick={userSecessionClicked}>
+                    회원 탈퇴
                 </UserProfileDetailList>
                 </UserProfileDetail> : null}</AnimatePresence>
             </UserProfileImg>

@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import AboutHeader from '../components/AboutHeader';
 import { AboutWrapper } from './About';
 import styled from 'styled-components';
-import { AboutFooter } from './Login';
 import axios from 'axios';
 import { Variants, motion } from 'framer-motion';
 import MainHeader from '../components/MainHeader';
@@ -19,17 +17,19 @@ const RecordBoxVariants: Variants = {
     },
   },
 };
-// if (!canvasRef.current) return;
+
 function RecordVoice() {
   const [recording, setRecording] = useState(false);
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const [response, setResponse] = useState(false);
+  // const [response, setResponse] = useState(false);
   const [time, setTime] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasContext, setCanvasContext] =
     useState<CanvasRenderingContext2D | null>(null);
+  const [showModal, setShowModal] = useState(false); // 모달 표시 여부
+  const [modalResponse, setModalResponse] = useState(''); // 모달에 표시할 응답
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -46,15 +46,15 @@ function RecordVoice() {
         mediaRecorder.current.stream,
       );
       source.connect(analyser);
-      analyser.connect(audioContext.destination);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
       const draw = () => {
         if (!canvasRef.current) return;
         requestAnimationFrame(draw);
 
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        analyser.getByteTimeDomainData(dataArray);
+        analyser.getByteFrequencyData(dataArray);
 
         canvasContext.fillStyle = 'rgb(47, 47, 47)';
         canvasContext.fillRect(
@@ -64,32 +64,22 @@ function RecordVoice() {
           canvasRef.current.height,
         );
 
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = 'rgb(117, 251, 153)';
-
-        canvasContext.beginPath();
-
-        const sliceWidth = (canvasRef.current.width * 1.0) / bufferLength;
+        const barWidth = (canvasRef.current.width / bufferLength) * 2.5;
         let x = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-          const v = dataArray[i] / 128.0;
-          const y = (v * canvasRef.current.height) / 2;
+          const barHeight = (dataArray[i] / 255) * canvasRef.current.height;
 
-          if (i === 0) {
-            canvasContext.moveTo(x, y);
-          } else {
-            canvasContext.lineTo(x, y);
-          }
+          canvasContext.fillStyle = `rgb(${barHeight + 100}, 117, 153)`;
+          canvasContext.fillRect(
+            x,
+            canvasRef.current.height - barHeight,
+            barWidth,
+            barHeight,
+          );
 
-          x += sliceWidth;
+          x += barWidth + 1;
         }
-
-        canvasContext.lineTo(
-          canvasRef.current.width,
-          canvasRef.current.height / 2,
-        );
-        canvasContext.stroke();
       };
 
       draw();
@@ -121,6 +111,9 @@ function RecordVoice() {
     mediaRecorder.current?.stop();
     setRecording(false);
     setStartTime(null);
+
+    const tracks = mediaRecorder.current?.stream.getTracks();
+    tracks?.forEach(track => track.stop());
   };
 
   const handleSendData = async () => {
@@ -133,8 +126,12 @@ function RecordVoice() {
         },
       });
       console.log(response.data);
+      setModalResponse(response.data);
+      setShowModal(true);
     } catch (error) {
       console.error(error);
+      setModalResponse('다음에 다시 시도해주세요');
+      setShowModal(true);
     }
   };
 
@@ -155,7 +152,7 @@ function RecordVoice() {
           {recording ? (
             <>
               <Button onClick={handleStopRecording}>Stop Recording</Button>
-              {startTime !== null && <div> 녹음 시간: {time} 초</div>}
+              {startTime !== null && <div>녹음 시간: {time} 초</div>}
             </>
           ) : (
             <Button onClick={handleStartRecording}>Start Recording</Button>
@@ -164,17 +161,20 @@ function RecordVoice() {
           {recordingBlob && (
             <div>
               <audio controls src={URL.createObjectURL(recordingBlob)} />
-              {/* <a
-                href={URL.createObjectURL(recordingBlob)}
-                download="recording.wav"
-              >
-                Download
-              </a> */}
               <Button onClick={handleSendData}>Send Data</Button>
             </div>
           )}
-          <h3>{response}</h3>
+          {/* <h3>응답{response}</h3> */}
         </RecordBox>
+        {showModal && (
+          <Modal>
+            <ModalContent>
+              <h2>서버 응답</h2>
+              <p>{modalResponse}</p>
+              <Button onClick={() => setShowModal(false)}>닫기</Button>
+            </ModalContent>
+          </Modal>
+        )}
       </AboutWrapper>
     </>
   );
@@ -217,5 +217,34 @@ const Button = styled.button`
     color: ${props => props.theme.white.darker};
     scale: 1.05;
     transition: color 0.2s ease-in-out, scale 0.2s ease-in-out;
+  }
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin-bottom: 20px;
   }
 `;

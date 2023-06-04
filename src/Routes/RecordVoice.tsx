@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Variants, motion } from 'framer-motion';
 import MainHeader from '../components/MainHeader';
+import { useNavigate } from 'react-router-dom';
 
 const RecordBoxVariants: Variants = {
   initial: {
@@ -29,6 +30,7 @@ function RecordVoice() {
     useState<CanvasRenderingContext2D | null>(null);
   const [showModal, setShowModal] = useState(false); // 모달 표시 여부
   const [modalResponse, setModalResponse] = useState(''); // 모달에 표시할 응답
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -115,15 +117,25 @@ function RecordVoice() {
     tracks?.forEach(track => track.stop());
   };
 
+  const handleMoveToEditProfile = () => {
+    navigate('/main/editprofile');
+  };
+
   const handleSendData = async () => {
     const formData = new FormData();
     formData.append('audio', recordingBlob as Blob);
     try {
-      const response = await axios.post('http://localhost:8080', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await axios.post(
+        'http://localhost:8080/api/recording',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNzM5NzY0NTY5Iiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg2ODg3NzcyfQ.SP4zE6PL3tw29x6xV2zLECsnxbCoNkAzTWcRTIaqgew',
+          },
         },
-      });
+      );
       console.log(response.data);
       setModalResponse(response.data);
       setShowModal(true);
@@ -147,6 +159,7 @@ function RecordVoice() {
           initial="initial"
           animate="animate"
         >
+          <h2>편하게 낼 수 있는 높은 소리를 내세요</h2>
           <Canvas ref={canvasRef} />
           {recording ? (
             <>
@@ -170,6 +183,9 @@ function RecordVoice() {
             <ModalContent>
               <h2>서버 응답</h2>
               <p>{modalResponse}</p>
+              <Button onClick={handleMoveToEditProfile}>
+                프로필로 이동하기
+              </Button>
               <Button onClick={() => setShowModal(false)}>닫기</Button>
             </ModalContent>
           </Modal>
@@ -208,6 +224,7 @@ const Button = styled.button`
   width: 300px;
   height: 50px;
   border-radius: 8px;
+  margin: 2px 6px;
   color: ${props => props.theme.white.darker};
   font-size: 20px;
   font-weight: 500;

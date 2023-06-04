@@ -25,6 +25,7 @@ const getAccessToken=():UserState=>{
   const storedProfileImg = localStorage.getItem("profileImg");
   const nickName=localStorage.getItem("nickName");
   const introduction=localStorage.getItem("introduction");
+  const octave=localStorage.getItem("octave");
   if(accessToken){
     axiosPrivate.defaults.headers.common[
       'Authorization'
@@ -33,7 +34,8 @@ const getAccessToken=():UserState=>{
         profileImg:storedProfileImg||defaultUserState.profileImg,
         isAuthenticated:true,
         nickname:nickName||defaultUserState.nickname,
-        introduction:introduction||defaultUserState.introduction
+        introduction:introduction||defaultUserState.introduction,
+        octave:octave||defaultUserState.octave
       }
   }
   return {...defaultUserState};

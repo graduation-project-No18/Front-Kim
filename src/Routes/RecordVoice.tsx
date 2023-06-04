@@ -7,6 +7,8 @@ import MainHeader from '../components/MainHeader';
 import DetailHeader from '../components/DetailHeader';
 import { axiosPrivate } from '../axios';
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from 'recoil';
+import { user } from '../recoil';
 
 const RecordBoxVariants: Variants = {
   initial: {
@@ -28,6 +30,7 @@ function RecordVoice() {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   // const [response, setResponse] = useState(false);
   const [time, setTime] = useState(0);
+  const [userState,setUserState]=useRecoilState(user);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasContext, setCanvasContext] =
     useState<CanvasRenderingContext2D | null>(null);
@@ -131,6 +134,11 @@ function RecordVoice() {
       console.log(response.data);
       setModalResponse(response.data);
       setShowModal(true);
+      localStorage.setItem("octave", response.data.octave);
+      setUserState({
+        ...userState,
+        octave:response.data.octave
+      })
       navigate('/main/editprofile',{
         state:response.data
       });

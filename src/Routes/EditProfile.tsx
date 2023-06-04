@@ -14,31 +14,31 @@ import { useLocation } from "react-router-dom";
 
 const EditProfileArea=styled(motion.div)`
     width:80%;
-    height:50%;
+    height:30%;
     display: flex;
-    align-items: center;
 `
 
 const SavedSongArea=styled(motion.div)`
     width:100%;
-    height:45%;
+    height:50%;
     display: flex;
     justify-content: center;
+    display: flex;
+    align-items: flex-end;
 `
 
 const ImgArea=styled.div`
     width:30%;
-    height:80%;
+    height:100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     position: relative;
 `
 
 const ProfileImg=styled.img`
-    width: 300px;
-    height:300px;
+    width: 200px;
+    height:200px;
     border-radius:50%;
     margin-bottom: 20px;
 `
@@ -53,7 +53,7 @@ const EditImg=styled.div`
     border-radius: 5px;
     background-color: ${props=>props.theme.black.lighter};
     position: absolute;
-    bottom:0px;
+    bottom:35px;
     color:${props=>props.theme.white.veryDark};
     display: flex;
     justify-content: center;
@@ -68,24 +68,24 @@ const EditImg=styled.div`
 
 const TextArea=styled.div`
     width:60%;
-    height:80%;
+    height:100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     position: relative;
 `
 
 const NickName=styled.div`
     width:100%;
-    height:27%;
+    height:25%;
     display: flex;
     align-items: center;
 `
 
 const Introduce=styled.div`
     width:100%;
-    height:67%;
+    height:45%;
     display: flex;
 `
 
@@ -109,6 +109,8 @@ const NickNameValue=styled.input`
     ::placeholder{
         color:${props=>props.theme.white.lighter};
     }
+    display: flex;
+    align-items:center;
 `
 
 const IntroduceKey=styled.div`
@@ -147,6 +149,23 @@ const EditNickNameAndIntroduce=styled.div`
         scale:1.05;
         background-color:${props=>props.theme.black.darker}
     }
+`
+
+const Octave=styled.div`
+    width:100%;
+    height:25%;
+    display: flex;
+    align-items: center;
+`
+
+const UserOctaveKey=styled.div`
+    width:25%;
+    height:100%;
+    font-size:26px;
+    color:${props=>props.theme.white.darker};
+    display: flex;
+    justify-content: center;
+
 `
 
 export const MyPageVariants:Variants={
@@ -239,13 +258,18 @@ function EditProfile(){
                     <IntroduceKey>Introduce:</IntroduceKey>
                     <IntroduceValue ref={introduceValue} disabled >{userState.introduction}</IntroduceValue>
                 </Introduce>
+                <Octave>
+                    <UserOctaveKey>Octave: {userState.octave}</UserOctaveKey>
+                </Octave>
                 <EditNickNameAndIntroduce onClick={EditNickNameAndIntroduceClicked}><span style={{marginRight:"7px"}}><FontAwesomeIcon icon={faPen} /></span>Edit Profile</EditNickNameAndIntroduce>
             </TextArea>
         </EditProfileArea>
         <SavedSongArea variants={MyPageVariants} initial="initial" animate="animate">
-            <SongBox albumCover={state.recommendations[0].albumCover} title={state.recommendation[0].title} singer={state.recommendation[0].singer} songOctave={state.recommendation[0].songOctave} youtubeUrl={state.recommendation[0].youtubeURL} />
-            <SongBox albumCover={state.recommendations[1].albumCover} title={state.recommendation[1].title} singer={state.recommendation[1].singer} songOctave={state.recommendation[1].songOctave} youtubeUrl={state.recommendation[1].youtubeURL} />            
-            <SongBox albumCover={state.recommendations[2].albumCover} title={state.recommendation[2].title} singer={state.recommendation[2].singer} songOctave={state.recommendation[2].songOctave} youtubeUrl={state.recommendation[2].youtubeURL} />       
+        {state ? <>
+            <SongBox color="#ffd700" albumCover={state.recommendations[0].albumCover} title={state.recommendation[0].title} singer={state.recommendation[0].singer} songOctave={state.recommendation[0].songOctave} youtubeUrl={state.recommendation[0].youtubeURL} />
+            <SongBox color="#c0c0c0" albumCover={state.recommendations[1].albumCover} title={state.recommendation[1].title} singer={state.recommendation[1].singer} songOctave={state.recommendation[1].songOctave} youtubeUrl={state.recommendation[1].youtubeURL} />            
+            <SongBox color="#CD7F32" albumCover={state.recommendations[2].albumCover} title={state.recommendation[2].title} singer={state.recommendation[2].singer} songOctave={state.recommendation[2].songOctave} youtubeUrl={state.recommendation[2].youtubeURL} />       
+            </> : null}
         </SavedSongArea>
     </AboutWrapper>
     </>

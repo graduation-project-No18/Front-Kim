@@ -5,6 +5,8 @@ import axios from 'axios';
 import { Variants, motion } from 'framer-motion';
 import MainHeader from '../components/MainHeader';
 import DetailHeader from '../components/DetailHeader';
+import { axiosPrivate } from '../axios';
+import { useNavigate } from "react-router-dom";
 
 const RecordBoxVariants: Variants = {
   initial: {
@@ -20,6 +22,7 @@ const RecordBoxVariants: Variants = {
 
 function RecordVoice() {
   const [recording, setRecording] = useState(false);
+  const navigate=useNavigate();
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -120,7 +123,7 @@ function RecordVoice() {
     const formData = new FormData();
     formData.append('audio', recordingBlob as Blob);
     try {
-      const response = await axios.post('http://localhost:8080', formData, {
+      const response = await axiosPrivate.post('http://3.37.47.43:8080/api/recording', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -128,6 +131,10 @@ function RecordVoice() {
       console.log(response.data);
       setModalResponse(response.data);
       setShowModal(true);
+      navigate('/main/editprofile',{
+        state:response.data
+      });
+      
     } catch (error) {
       console.error(error);
       setModalResponse('다음에 다시 시도해주세요');

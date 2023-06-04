@@ -10,19 +10,18 @@ import { axiosPrivate } from "../axios";
 import { Variants, motion } from "framer-motion";
 import {useState} from "react";
 import SongBox from "../components/SongBox";
+import { useLocation } from "react-router-dom";
 
 const EditProfileArea=styled(motion.div)`
     width:80%;
     height:50%;
-    margin-bottom: 30px;
     display: flex;
     align-items: center;
 `
 
 const SavedSongArea=styled(motion.div)`
     width:100%;
-    height:40%;
-    background-color: red;
+    height:45%;
     display: flex;
     justify-content: center;
 `
@@ -165,6 +164,7 @@ export const MyPageVariants:Variants={
 
 function EditProfile(){
     const [userState,setUserState]=useRecoilState(user);
+    const {state}=useLocation();
     const [editting,setEditting]=useState(false);
     const memberId='16de3dcd-2fca-473e-8219-6632d8a011a5';
     const logoImgInput=useRef<HTMLInputElement>(null);
@@ -243,7 +243,9 @@ function EditProfile(){
             </TextArea>
         </EditProfileArea>
         <SavedSongArea variants={MyPageVariants} initial="initial" animate="animate">
-            <SongBox albumCover="https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg" title="나와 같다면" singer="김연우" songOctave="F3" youtubeUrl="https://youtube.com" />
+            <SongBox albumCover={state.recommendations[0].albumCover} title={state.recommendation[0].title} singer={state.recommendation[0].singer} songOctave={state.recommendation[0].songOctave} youtubeUrl={state.recommendation[0].youtubeURL} />
+            <SongBox albumCover={state.recommendations[1].albumCover} title={state.recommendation[1].title} singer={state.recommendation[1].singer} songOctave={state.recommendation[1].songOctave} youtubeUrl={state.recommendation[1].youtubeURL} />            
+            <SongBox albumCover={state.recommendations[2].albumCover} title={state.recommendation[2].title} singer={state.recommendation[2].singer} songOctave={state.recommendation[2].songOctave} youtubeUrl={state.recommendation[2].youtubeURL} />       
         </SavedSongArea>
     </AboutWrapper>
     </>

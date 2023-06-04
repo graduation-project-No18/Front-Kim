@@ -22,11 +22,13 @@ function RecordVoice() {
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const [response, setResponse] = useState(false);
+  // const [response, setResponse] = useState(false);
   const [time, setTime] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasContext, setCanvasContext] =
     useState<CanvasRenderingContext2D | null>(null);
+  const [showModal, setShowModal] = useState(false); // 모달 표시 여부
+  const [modalResponse, setModalResponse] = useState(''); // 모달에 표시할 응답
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -123,8 +125,12 @@ function RecordVoice() {
         },
       });
       console.log(response.data);
+      setModalResponse(response.data);
+      setShowModal(true);
     } catch (error) {
       console.error(error);
+      setModalResponse('다음에 다시 시도해주세요');
+      setShowModal(true);
     }
   };
 
@@ -154,17 +160,20 @@ function RecordVoice() {
           {recordingBlob && (
             <div>
               <audio controls src={URL.createObjectURL(recordingBlob)} />
-              <a
-                href={URL.createObjectURL(recordingBlob)}
-                download="recording.mp3"
-              >
-                Download
-              </a>
               <Button onClick={handleSendData}>Send Data</Button>
             </div>
           )}
-          <h3>{response}</h3>
+          {/* <h3>응답{response}</h3> */}
         </RecordBox>
+        {showModal && (
+          <Modal>
+            <ModalContent>
+              <h2>서버 응답</h2>
+              <p>{modalResponse}</p>
+              <Button onClick={() => setShowModal(false)}>닫기</Button>
+            </ModalContent>
+          </Modal>
+        )}
       </AboutWrapper>
     </>
   );
@@ -207,5 +216,34 @@ const Button = styled.button`
     color: ${props => props.theme.white.darker};
     scale: 1.05;
     transition: color 0.2s ease-in-out, scale 0.2s ease-in-out;
+  }
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin-bottom: 20px;
   }
 `;
